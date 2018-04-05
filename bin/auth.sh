@@ -13,10 +13,10 @@ fi
 
 . "$LIB_i2pcontrolcurl"
 
-if [ -z "$PASSWORD" ]; then
+if [ -z "$i2pcontrol_password" ]; then
     if [ ! -z "$1" ]; then
-        PASSWORD="$1"
+        i2pcontrol_password="$1"
     fi
 fi
 
-token test "$PASSWORD"
+token test "$i2pcontrol_password"

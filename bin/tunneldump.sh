@@ -11,7 +11,7 @@ else
     LIB_i2pcontrolcurl="./lib/i2prpccurl/aliases.sh"
 fi
 
-. $LIB_i2pcontrolcurl
+. "$LIB_i2pcontrolcurl"
 
 $(./bin/auth.sh $1)
 
