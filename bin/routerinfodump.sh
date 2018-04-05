@@ -4,7 +4,7 @@ set -e
 
 . ./lib/i2prpccurl/aliases.sh
 
-. ./bin/auth.sh
+$(./bin/auth.sh $1)
 
 routerstatus | grep -v jsonrpc=2.0
 routerupstime | grep -v jsonrpc=2.0

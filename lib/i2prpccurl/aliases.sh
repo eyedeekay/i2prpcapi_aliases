@@ -146,18 +146,32 @@ networksetting(){
         \"method\":\"NetworkSetting\",
         \"params\":{
             \"Token\": $Token,
-            \"$1\": \"null\"}
+            \"$1\": $2 }
         }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
         tr ',{}' '\n' |
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
 
 routernetbwin(){
-    networksetting "i2p.router.net.bw.in"
+    echo "$1"
+    if [ -z "$1" ]; then
+        Value="null"
+    else
+        Value="$1"
+    fi
+    echo "$Value"
+    networksetting "i2p.router.net.bw.in" "$Value"
 }
 
 routernetbwout(){
-    networksetting "i2p.router.net.bw.out"
+    echo "$1"
+    if [ -z "$1" ]; then
+        Value="null"
+    else
+        Value="$1"
+    fi
+    echo "$Value"
+    networksetting "i2p.router.net.bw.out" "$Value"
 }
 
 clientservicesinfo(){
@@ -173,6 +187,22 @@ clientservicesinfo(){
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
 
-i2ptunnelinfo(){
+tunnelinfo(){
     clientservicesinfo "I2PTunnel"
+}
+
+socksinfo(){
+    clientservicesinfo "SOCKS"
+}
+
+saminfo(){
+    clientservicesinfo "SAM"
+}
+
+bobinfo(){
+    clientservicesinfo "BOB"
+}
+
+i2pcpinfo(){
+    clientservicesinfo "I2CP"
 }
