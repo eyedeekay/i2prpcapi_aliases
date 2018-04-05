@@ -12,7 +12,6 @@ install:
 	ln -sfv /usr/lib/i2prpccurl/auth.sh "$(INSTALL_PATH)"/i2prpcauth
 	ln -sfv /usr/lib/i2prpccurl/routerinfodump.sh "$(INSTALL_PATH)"/routerinfodump
 	ln -sfv /usr/lib/i2prpccurl/tunneldump.sh "$(INSTALL_PATH)"/tunneldump
-	#install -m755 bin/ /usr/lib/i2prpccurl/
 
 remove:
 	rm -rf /usr/lib/i2prpccurl/*.sh \
@@ -23,3 +22,18 @@ remove:
 		/usr/bin/i2prpcauth \
 		/usr/bin/routerinfodump \
 		/usr/bin/tunneldump
+
+deb:
+	checkinstall --install=no --fstrans=yes --default \
+		--pkgname="i2prpccurl" \
+		--pkgversion="0.1" \
+		--arch="indep" \
+		--pkglicense=gpl3 \
+		--pkggroup=net \
+		--pakdir=../ \
+		--maintainer="ex@ex.org" \
+		--nodoc \
+		--deldoc=yes \
+		--deldesc=yes \
+		--backup=no
+
