@@ -43,7 +43,7 @@ i2pcontrol(){
 }
 
 password(){
-    i2pcontrol "password" "$1"
+    i2pcontrol "i2pcontrol.password" "$1"
 }
 
 routerinfo(){
@@ -114,6 +114,31 @@ routernetdbknownpeers(){
     routerinfo "i2p.router.netdb.knownpeers"
 }
 
+routermanager(){
+    /usr/bin/curl -s -k --data-binary "{
+        \"jsonrpc\":\"2.0\",
+        \"id\":\"$1\",
+        \"method\":\"RouterManager\",
+        \"params\":{
+            \"Token\": $Token,
+            \"$1\": \"null\"}
+        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        tr ',{}' '\n' |
+        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+}
+
+routerreseed(){
+    routermanager "Reseed"
+}
+
+routershutdown(){
+    routermanager "Shutdown"
+}
+
+routershutdowngraceful(){
+    routermanager "ShutdownGraceful"
+}
+
 clientservicesinfo(){
     /usr/bin/curl -s -k --data-binary "{
         \"jsonrpc\":\"2.0\",
@@ -128,14 +153,5 @@ clientservicesinfo(){
 }
 
 i2ptunnelinfo(){
-    /usr/bin/curl -s -k --data-binary "{
-        \"jsonrpc\":\"2.0\",
-        \"id\":\"I2PTunnel\",
-        \"method\":\"ClientServicesInfo\",
-        \"params\":{
-            \"Token\": $Token,
-            \"I2PTunnel\": \"null\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
-        tr ',{}' '\n' |
-        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+    clientservicesinfo "I2PTunnel"
 }
