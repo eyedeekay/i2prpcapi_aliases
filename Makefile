@@ -8,3 +8,6 @@ install:
 	mkdir -p /etc/i2prpc
 	install -m755 etc/i2prpc/i2prpc.conf /etc/i2prpc
 	#install -m755 bin/ /usr/lib/i2prpccurl/
+
+remove:
+	rm -rf /usr/lib/i2prpccurl/*.sh /etc/i2prpc/i2prpc.conf
