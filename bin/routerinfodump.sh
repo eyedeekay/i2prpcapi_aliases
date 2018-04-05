@@ -4,7 +4,8 @@ set -e
 
 if [ -f "/etc/i2prpc/i2prpc.conf" ]; then
     . "/etc/i2prpc/i2prpc.conf"
-elif [ -f "i2prpc.conf" ]; then
+fi
+if [ -f "i2prpc.conf" ]; then
     . "i2prpc.conf"
 else
     LIB_i2pcontrolcurl="./lib/i2prpccurl/aliases.sh"

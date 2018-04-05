@@ -1,5 +1,18 @@
 # i2prpcapi_aliases
-curl commands as functions for interacting with the i2pcontrol api, because I'm too tired to keep working on the go version all night.
+
+curl commands as functions for interacting with the i2pcontrol api, because I'm
+too tired to keep working on the go version all night.
+
+## Installation:
+
+        sudo make install
+
+will place the scripts in /usr/lib/i2prpccurl/ and the settings in
+/etc/i2prpc/i2prpc.conf.
+
+        sudo make remove
+
+will remove the scripts and settings.
 
 ## Shell function library for gathering information from the i2pcontrol bridge.
 
