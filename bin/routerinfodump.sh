@@ -13,7 +13,15 @@ fi
 
 . "$LIB_i2pcontrolcurl"
 
-$(./bin/auth.sh $1)
+if [ -f ./bin/auth.sh ]; then
+    $(./bin/auth.sh $1)
+elif [ -f ./auth.sh ]; then
+    $(./auth.sh $1)
+else
+    $(/usr/bin/i2prpcauth $1)
+fi
+
+
 
 routerstatus | grep -v jsonrpc=2.0
 routerupstime | grep -v jsonrpc=2.0
