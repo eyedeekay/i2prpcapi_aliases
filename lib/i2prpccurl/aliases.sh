@@ -1,4 +1,12 @@
 
+if [ -z "$i2pcontrol_host" ]; then
+    i2pcontrol_host="127.0.0.1"
+fi
+
+if [ -z "$i2pcontrol_port" ]; then
+    i2pcontrol_port="7650"
+fi
+
 authenticate(){
     /usr/bin/curl -s -k --data-binary "{
         \"jsonrpc\":\"2.0\",
@@ -7,7 +15,7 @@ authenticate(){
         \"params\":{
             \"API\": 1,
             \"Password\": \"$2\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
         tr ',{}' '\n' |
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
@@ -24,7 +32,7 @@ i2pecho(){
         \"params\":{
             \"Token\": \"$Token\",
             \"Echo\": \"$1\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
         tr ',{}' '\n' |
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
@@ -37,13 +45,17 @@ i2pcontrol(){
         \"params\":{
             \"$1\": \"$2\",
             \"Token\": \"$Token\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
         tr ',{}' '\n' |
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
 
 password(){
     i2pcontrol "i2pcontrol.password" "$1"
+}
+
+exportpassword(){
+    i2pcontrol "i2pcontrol.password" "$1" | sed 's/^/export /'
 }
 
 routerinfo(){
@@ -54,64 +66,121 @@ routerinfo(){
         \"params\":{
             \"$1\": \"null\",
             \"Token\": \"$Token\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
         tr ',{}' '\n' |
-        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d' | grep -v 'id='
 }
 
 routerstatus(){
     routerinfo "i2p.router.status"
 }
 
+exportrouterstatus(){
+    routerinfo "i2p.router.status" | sed 's/^/export /'
+}
+
 routerupstime(){
     routerinfo "i2p.router.uptime"
+}
+
+exportrouterupstime(){
+    routerinfo "i2p.router.uptime" | sed 's/^/export /'
 }
 
 routerversion(){
     routerinfo "i2p.router.version"
 }
 
+exportrouterversion(){
+    routerinfo "i2p.router.version" | sed 's/^/export /'
+}
+
 routernetbwinbound1s(){
     routerinfo "i2p.router.net.bw.inbound.1s"
+}
+
+exportrouternetbwinbound1s(){
+    routerinfo "i2p.router.net.bw.inbound.1s" | sed 's/^/export /'
 }
 
 routernetbwinbound15s(){
     routerinfo "i2p.router.net.bw.inbound.15s"
 }
 
+exportrouternetbwinbound15s(){
+    routerinfo "i2p.router.net.bw.inbound.15s" | sed 's/^/export /'
+}
+
 routernetbwoutbound1s(){
     routerinfo "i2p.router.net.bw.outbound.1s"
 }
+
+exportrouternetbwoutbound1s(){
+    routerinfo "i2p.router.net.bw.outbound.1s" | sed 's/^/export /'
+}
+
 routernetbwoutbound15s(){
     routerinfo "i2p.router.net.bw.outbound.15s"
 }
 
-routernetstatus(){
-    routerinfo "i2p.router.net.status"
+exportrouternetbwoutbound15s(){
+    routerinfo "i2p.router.net.bw.outbound.15s" | sed 's/^/export /'
 }
 
 routernetstatus(){
     routerinfo "i2p.router.net.status"
+}
+
+exportrouternetstatus(){
+    routerinfo "i2p.router.net.status" | sed 's/^/export /'
+}
+
+routernetstatus(){
+    routerinfo "i2p.router.net.status"
+}
+
+exportrouternetstatus(){
+    routerinfo "i2p.router.net.status" | sed 's/^/export /'
 }
 
 routernetdbactivepeers(){
     routerinfo "i2p.router.netdb.activepeers"
 }
 
+exportrouternetdbactivepeers(){
+    routerinfo "i2p.router.netdb.activepeers" | sed 's/^/export /'
+}
+
 routernetdbfastpeers(){
     routerinfo "i2p.router.netdb.fastpeers"
+}
+
+exportrouternetdbfastpeers(){
+    routerinfo "i2p.router.netdb.fastpeers" | sed 's/^/export /'
 }
 
 routernetdbhighcapacitypeers(){
     routerinfo "i2p.router.netdb.highcapacitypeers"
 }
 
+exportrouternetdbhighcapacitypeers(){
+    routerinfo "i2p.router.netdb.highcapacitypeers" | sed 's/^/export /'
+}
+
 routernetdbisreseeding(){
     routerinfo "i2p.router.netdb.isreseeding"
 }
 
+exportrouternetdbisreseeding(){
+    routerinfo "i2p.router.netdb.isreseeding" | sed 's/^/export /'
+}
+
 routernetdbknownpeers(){
     routerinfo "i2p.router.netdb.knownpeers"
+}
+
+exportrouternetdbknownpeers(){
+    routerinfo "i2p.router.netdb.knownpeers" | sed 's/^/export /'
 }
 
 routermanager(){
@@ -122,7 +191,7 @@ routermanager(){
         \"params\":{
             \"Token\": $Token,
             \"$1\": \"null\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
         tr ',{}' '\n' |
         tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
 }
@@ -147,31 +216,35 @@ networksetting(){
         \"params\":{
             \"Token\": $Token,
             \"$1\": $2 }
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
-        tr ',{}' '\n' |
-        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
+        tr ',{}' '\n' | tr -d '"' | sed 's|result:||g' | tr ':' '=' |
+        sed '/^\s*$/d'
 }
 
 routernetbwin(){
-    echo "$1"
     if [ -z "$1" ]; then
         Value="null"
     else
         Value="$1"
     fi
-    echo "$Value"
     networksetting "i2p.router.net.bw.in" "$Value"
 }
 
+exportrouternetbwin(){
+    routernetbwin $1 | sed 's/^/export /'
+}
+
 routernetbwout(){
-    echo "$1"
     if [ -z "$1" ]; then
         Value="null"
     else
         Value="$1"
     fi
-    echo "$Value"
     networksetting "i2p.router.net.bw.out" "$Value"
+}
+
+routernetbwout(){
+    routernetbwout $1 | sed 's/^/export /'
 }
 
 clientservicesinfo(){
@@ -182,27 +255,49 @@ clientservicesinfo(){
         \"params\":{
             \"Token\": $Token,
             \"$1\": \"null\"}
-        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
-        tr ',{}' '\n' |
-        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+        }" -H 'content-type:application/json-rpc;' "https://$i2pcontrol_host:$i2pcontrol_port/" 2>&1 |
+        tr ',{}' '\n' | tr -d '"' | sed 's|result:||g' | tr ':' '=' |
+        sed '/^\s*$/d'
 }
 
 tunnelinfo(){
-    clientservicesinfo "I2PTunnel"
+    clientservicesinfo "I2PTunnel" | grep -v "I2PTunnel" | grep -v "client" |
+        perl -p -e 's/=\n/=/' | sed 's|address=|"|g' |
+        sed 's|.b32.i2p|.b32.i2p"|g' | grep -v jsonrpc | tr -d '-'
+}
+
+exporttunnelinfo(){
+    tunnelinfo | sed 's/^/export /'
 }
 
 socksinfo(){
-    clientservicesinfo "SOCKS"
+    clientservicesinfo "SOCKS" | grep -v "SOCKS" | grep -v jsonrpc
+}
+
+exportsocksinfo(){
+    socksinfo | sed 's/^/export /'
 }
 
 saminfo(){
-    clientservicesinfo "SAM"
+    clientservicesinfo "SAM" | grep -v "SAM" | grep -v jsonrpc
+}
+
+exportsaminfo(){
+    saminfo | sed 's/^/export /'
 }
 
 bobinfo(){
-    clientservicesinfo "BOB"
+    clientservicesinfo "BOB" | grep -v "BOB" | grep -v jsonrpc
+}
+
+exportbobinfo(){
+    bobinfo | sed 's/^/export /'
 }
 
 i2pcpinfo(){
-    clientservicesinfo "I2CP"
+    clientservicesinfo "I2CP" | grep -v "I2CP" | grep -v jsonrpc
+}
+
+exporti2pcpinfo(){
+    i2pcpinfo | sed 's/^/export /'
 }
