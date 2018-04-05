@@ -7,8 +7,17 @@ if [ -z "$i2pcontrol_port" ]; then
     i2pcontrol_port="7650"
 fi
 
+if [ -z "$i2pcontrol_cacert" ]; then
+    i2pcontrol_cacert=/var/lib/i2pd/i2pcontrol.cert.pem
+fi
+
+if [ -z "$i2pcontrol_cakey" ]; then
+    i2pcontrol_cakey=/var/lib/i2pd/i2pcontrol.key.pem
+fi
+
+
 authenticate(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"Authenticate\",
@@ -25,7 +34,7 @@ token(){
 }
 
 i2pecho(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"Echo\",
@@ -38,7 +47,7 @@ i2pecho(){
 }
 
 i2pcontrol(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"I2PControl\",
@@ -59,7 +68,7 @@ exportpassword(){
 }
 
 routerinfo(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"RouterInfo\",
@@ -184,7 +193,7 @@ exportrouternetdbknownpeers(){
 }
 
 routermanager(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"RouterManager\",
@@ -209,7 +218,7 @@ routershutdowngraceful(){
 }
 
 networksetting(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"NetworkSetting\",
@@ -248,7 +257,7 @@ routernetbwout(){
 }
 
 clientservicesinfo(){
-    /usr/bin/curl -s -k --data-binary "{
+    /usr/bin/curl -s -k  --data-binary "{
         \"jsonrpc\":\"2.0\",
         \"id\":\"$1\",
         \"method\":\"ClientServicesInfo\",
@@ -301,3 +310,5 @@ i2pcpinfo(){
 exporti2pcpinfo(){
     i2pcpinfo | sed 's/^/export /'
 }
+
+#--cert "$i2pcontrol_cacert" --key "$i2pcontrol_cakey"
