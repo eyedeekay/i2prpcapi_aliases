@@ -139,6 +139,27 @@ routershutdowngraceful(){
     routermanager "ShutdownGraceful"
 }
 
+networksetting(){
+    /usr/bin/curl -s -k --data-binary "{
+        \"jsonrpc\":\"2.0\",
+        \"id\":\"$1\",
+        \"method\":\"NetworkSetting\",
+        \"params\":{
+            \"Token\": $Token,
+            \"$1\": \"null\"}
+        }" -H 'content-type:application/json-rpc;' https://127.0.0.1:7650/ 2>&1 |
+        tr ',{}' '\n' |
+        tr -d '"' | sed 's|result:||g' | tr ':' '=' | sed '/^\s*$/d'
+}
+
+routernetbwin(){
+    networksetting "i2p.router.net.bw.in"
+}
+
+routernetbwout(){
+    networksetting "i2p.router.net.bw.out"
+}
+
 clientservicesinfo(){
     /usr/bin/curl -s -k --data-binary "{
         \"jsonrpc\":\"2.0\",
